@@ -1,6 +1,5 @@
 import random
 import time
-import threading
 import os
 
 def input(*args, **kwargs):
@@ -27,103 +26,246 @@ def print(*args, **kwargs):
         time.sleep(0.03)
 
     __builtins__.print(end=end)
-    
-def loja_inv(amarelo, branco, vermelho, pocao, reais, qtd):
-    global nível
 
-    print(f"{amarelo}Comerciante:{branco} Bem vindo a Loja da Guilda, temos essa {vermelho}Poção{branco} que custa R${pocao}!")
-    loja = input('''Você quer Comprar? Y/N:
->> ''').strip().lower() in ["sim", "s", "y"]
-    print(cl)
+qtd = 0
+bombas = 0
+flechas = 0
 
-    if loja:
-        if reais < pocao:
-            print(f"{amarelo}Comerciante:{branco} Você não tem {amarelo}Dinheiro{branco} Suficiente!")
-            print(cl)
-            
-        
-        else:
-            max_poc = nível * 2
-            qtd = int(input(f'''{amarelo}Comerciante:{branco} Quantas {vermelho}Poções{branco} Você Deseja? (Máx: {max_poc})
->> '''))
-            venda = qtd * pocao
-            
-            print(cl)
-            
-            if qtd <=0:
-                print(f"{amarelo}Comerciante:{branco} Muito Engraçado... Saia da Minha Loja!!!")
-                qtd = 0
-                print(cl)
-            
-            elif reais < venda:
-                while reais < venda:
-                    print(f"Dinheiro Insuficiente! Tentando Comprar {vermelho}{qtd} Poções{branco}, mas Você só tem {amarelo}{reais} Reais!{branco}")
-                    print()
-                    max_poc = nível * 2
-                    qtd = int(input(f'''{amarelo}Comerciante:{branco} Quantas {vermelho}Poções{branco} Você Deseja? (Máx: {max_poc})
->> '''))
-                    venda = qtd * pocao
-                    print(cl)
+def loja():
 
-                    if reais >= venda:
-                        reais -= venda
-                        print(f"{amarelo}Comerciante:{branco} São Todas Suas Campeão!")
-                        print(f"{cinza}Sistema:{branco}{vermelho} {qtd} Poções{branco} Adicionadas Ao Inventário")
+    global qtd, bombas, flechas, reais, classe
 
-                        if reais > 0:
-                            print(f"{amarelo}Comerciante:{branco} Aqui está seu troco:",round(reais, 2))
-                            print(cl)
+    PRECO_POCAO = 50
+    PRECO_BOMBA = 150
+    PRECO_FLECHA = 5
 
-                        else:
-                            print(f"{amarelo}Comerciante:{branco} Você Torrou seu Dinheiro, Não tem Troco!")
-                            print(cl)
-                
-            elif reais >= venda:
-                reais -= venda
-                print(f"{amarelo}Comerciante:{branco} São Todas Suas Campeão!")
-                print(f"{cinza}Sistema:{branco}{vermelho} {qtd} Poções{branco} Adicionadas Ao Inventário")
+    while True:
 
-                if reais > 0:
-                    print(f"{amarelo}Comerciante:{branco} Aqui está seu troco:",round(reais, 2))
-                    print(cl)
+        limpar()
 
-                else:
-                    print(f"{amarelo}Comerciante:{branco} Você Torrou seu Dinheiro, Não tem Troco!")
-                    print(cl)
+        print(cl)
+        print(f"{amarelo}=========== LOJA DA GUILDA ==========={branco}")
+        print(f"Dinheiro : {amarelo}R${reais}{branco}")
+        print("--------------------------------------")
+        print(f"{verde}Poções : {qtd}{branco}")
+        print(f"{roxo}Bombas : {bombas}{branco}")
 
-            else:
-                print("Resposta Inválida!")
-                print(cl)   
-                
-    else:
-        print(f"{amarelo}Comerciante:{branco} Volte Sempre!")
+        if classe == "arqueiro":
+            print(f"{azul}Flechas: {flechas}{branco}")
+
         print(cl)
 
+        print("1 - Comprar Poções   (R$50)")
+        print("2 - Comprar Bombas   (R$150)")
 
-    print("Este é Seu Inventário no Momento:")
-    print(f"{vermelho}Poção: {qtd}{branco}") 
+        if classe == "arqueiro":
+            print("3 - Comprar Flechas (R$5)")
+
+        elif classe == "bandido":
+            print(f"{vermelho}3 - Roubar Item{branco}")
+
+        print("0 - Sair")
+
+        try:
+            escolha = int(input("\n>> "))
+        except ValueError:
+            print("Digite um número válido!")
+            input("\nENTER...")
+            continue
+
+        # ==========================
+        # SAIR
+        # ==========================
+
+        if escolha == 0:
+            break
+
+        # ==========================
+        # POÇÕES
+        # ==========================
+
+        elif escolha == 1:
+
+            try:
+                comprar = int(input("\nQuantidade:\n>> "))
+            except ValueError:
+                print("Digite um número válido!")
+                input("\nENTER...")
+                continue
+
+            if comprar <= 0:
+                print("Quantidade inválida!")
+
+            else:
+
+                custo = comprar * PRECO_POCAO
+
+                if custo > reais:
+                    print("Dinheiro insuficiente!")
+
+                else:
+                    reais -= custo
+                    qtd += comprar
+
+                    print(f"\nVocê comprou {comprar} poções!")
+
+        # ==========================
+        # BOMBAS
+        # ==========================
+
+        elif escolha == 2:
+
+            try:
+                comprar = int(input("\nQuantidade:\n>> "))
+            except ValueError:
+                print("Digite um número válido!")
+                input("\nENTER...")
+                continue
+
+            if comprar <= 0:
+                print("Quantidade inválida!")
+
+            else:
+
+                custo = comprar * PRECO_BOMBA
+
+                if custo > reais:
+                    print("Dinheiro insuficiente!")
+
+                else:
+                    reais -= custo
+                    bombas += comprar
+
+                    print(f"\nVocê comprou {comprar} bombas!")
+
+        # ==========================
+        # FLECHAS
+        # ==========================
+
+        elif escolha == 3 and classe == "arqueiro":
+
+            try:
+                comprar = int(input("\nQuantidade:\n>> "))
+            except ValueError:
+                print("Digite um número válido!")
+                input("\nENTER...")
+                continue
+
+            if comprar <= 0:
+                print("Quantidade inválida!")
+
+            else:
+
+                custo = comprar * PRECO_FLECHA
+
+                if custo > reais:
+                    print("Dinheiro insuficiente!")
+
+                else:
+                    reais -= custo
+                    flechas += comprar
+
+                    print(f"\nVocê comprou {comprar} flechas!")
+
+        # ==========================
+        # BANDIDO
+        # ==========================
+
+        elif escolha == 3 and classe == "bandido":
+
+            print(cl)
+            print("O que deseja roubar?")
+            print("1 - Poção")
+            print("2 - Bomba")
+
+            roubo = input("\n>> ")
+
+            chance = random.randint(1,100)
+
+            print("\nTentando roubar...")
+            time.sleep(2)
+
+            if roubo == "1":
+
+                if chance <= 75:
+
+                    ganho = random.randint(1,5)
+                    qtd += ganho
+
+                    print(f"Você roubou {ganho} poções!")
+
+                else:
+
+                    multa = 150
+
+                    print("O comerciante percebeu o roubo!")
+                    print(f"Você perdeu R${multa}.")
+
+                    reais = max(0, reais - multa)
+
+            elif roubo == "2":
+
+                if chance <= 45:
+
+                    ganho = random.randint(1,3)
+                    bombas += ganho
+
+                    print(f"Você roubou {ganho} bombas!")
+
+                else:
+
+                    multa = 300
+
+                    print("O comerciante percebeu o roubo!")
+                    print(f"Você perdeu R${multa}.")
+
+                    reais = max(0, reais - multa)
+
+            else:
+                print("Opção inválida!")
+
+        else:
+            print("Opção inválida!")
+
+        input("\nENTER para continuar...")
+
+    limpar()
+
+    print(cl)
+    print("INVENTÁRIO")
+
+    print(f"Poções : {qtd}")
+    print(f"Bombas : {bombas}")
+
+    if classe == "arqueiro":
+        print(f"Flechas: {flechas}")
+
     if classe == "guerreiro":
         print("Espada de Ferro")
+
     elif classe == "executor":
         print("Machado de Batalha")
+
     elif classe == "mago":
         print("Cajado de Madeira")
+
     elif classe == "arqueiro":
         print("Arco de Madeira")
-        print("Flechas Comuns")
-        input("\nAperte ENTER Para Continuar: ")
-    print(cl)
 
-    return qtd, reais
-qtd = 0
-pocao = 50
+    elif classe == "bandido":
+        print("Adaga Enferrujada")
+
+    input("\nENTER para continuar...")
 
 def limpar():
     os.system("cls" if os.name == "nt" else "clear")
 
 cl = "-"*140
 
-# Cores do Terminal
+# ===============================================================
+# ====================== Cores do Terminal ======================
+# ===============================================================
+
 
 azul = "\033[34m"
 branco = "\033[37m"
@@ -134,7 +276,9 @@ vermelho = "\033[31m"
 verde1 = "\033[92m"
 cinza = "\033[90m"
 
-# Informações Iniciais
+# ==================================================================
+# ====================== Informações Iniciais ======================
+# ==================================================================
 
 print(cl)
 nome = input('''Qual é o Seu Nome?
@@ -160,13 +304,13 @@ while True:
         break
 
 print("Escolha sua Classe, Por Favor!")
-classe = input('''Mago / Executor / Guerreiro / Arqueiro
+classe = input('''Mago / Executor / Guerreiro / Arqueiro / Bandido
 >> ''').lower()
 print(cl)
 
-while classe != "mago" and classe != "executor" and classe != "guerreiro" and classe != "arqueiro":
+while classe not in ["mago", "executor", "guerreiro", "arqueiro", "bandido"]:
     print("Resposta Inválida! Tente Novamente!")
-    classe = input('''Mago / Executor / Guerreiro / Arqueiro
+    classe = input('''Mago / Executor / Guerreiro / Arqueiro / Bandido
 >> ''').lower()
     print(cl)
     
@@ -190,7 +334,10 @@ print(f"{amarelo}Dinheiro: {reais}{branco}")
 print(f"Idade Atual: {idade}")
 print(cl)
 
-# Treinamento de 3 Anos
+# ===================================================================
+# ====================== Treinamento de 3 Anos ======================
+# ===================================================================
+
 while True:
 
     train = int(input('''Como qualquer Iniciante você decide Treinar, Mas por quantos Anos?
@@ -262,9 +409,13 @@ while True:
         break
 
 limpar()
-qtd, reais = loja_inv(amarelo, branco, vermelho, pocao, reais, qtd)
 
-# Definições da Batalha
+loja()
+
+# ===================================================================
+# ====================== Definições da Batalha ======================
+# ===================================================================
+
 
 def ataque_monstro(bosshp ,hp, nível):
     cnt = random.randint(1, 10)
@@ -363,7 +514,7 @@ O Número rolado foi: {d20}''')
 
             hp = ataque_monstro(bosshp, hp, nível)
                     
-        elif d20 == 1:
+        else:
             dano = nível * 10
             bosshp = bosshp - dano
             print()
@@ -433,7 +584,7 @@ O Número rolado foi: {d20}''')
 
             hp = ataque_monstro(bosshp, hp, nível)
                     
-        elif d20 == 1:
+        else:
             dano = nível * 10
             bosshp = bosshp - dano
             print()
@@ -587,10 +738,8 @@ o Número rolado Foi: {sorte}''')
         dano = 10000
         hp -= dano
         print()
-        print(f"sua Tentativa de Fuga Falhou, o {roxo}Dragão{branco}te Matou!!!")
-        print()
+        print(f"sua Tentativa de Fuga Falhou, o {roxo}Dragão{branco} te Matou!!!")
         
-            
     elif sorte >=61:
         print()
         print(f"Você Fugiu do {roxo}Dragão {branco}com Sucesso!")
@@ -598,11 +747,10 @@ o Número rolado Foi: {sorte}''')
         print(f"{vermelho}GAME OVER!{branco}")
         print()
         print(cl)
+    return hp
 
 def ataque_bomba(bosshp, hp, nível, ataque_monstro):
     sorte = random.randint(1, 100)
-    import time
-
     global azul, branco, vermelho, verde1, verde, cl, amarelo, roxo, cinza
 
     print("Validando Ação, Aguarde...")
@@ -690,7 +838,7 @@ def usar_pocao(bosshp, hp, nível, qtd, ataque_monstro):
 
     else:
         porc = 0.10
-        cura *= porc
+        cura = hp_max * porc
         hp += cura
 
         if hp > hp_max:
@@ -700,125 +848,271 @@ def usar_pocao(bosshp, hp, nível, qtd, ataque_monstro):
         print()
         print(f"Você Bebeu uma {vermelho}Poção {branco}e Recuperou {int(cura)} de Vida!")
         print(f"{azul}Vida Atual: {int(hp)}{branco}")
-        print(f"{vermelho}Poções Restantes: {qtd}{branco}")
         print()
         print(cl)
 
     return qtd, hp
 
-# Batalha contra o Dragão
+def ataque_bandido(bosshp, hp, nível, ataque_monstro):
 
-bosshp = nível * 100
-print(f"Oh Não, Apareceu um {roxo}Dragão {branco}e Ele está Atacando o Vilarejo!")
-poc_tu = 0
-input("\nAperte ENTER Para Continuar: ")
+    print(cl)
 
-while bosshp > 0 and hp > 0:
-    limpar()
-    print(f"A Vida dele está em: {roxo}{bosshp}{branco}")
-    print(f"Sua Vida está em {azul}{int(hp)}{branco}")
-    print()
+    d20 = random.randint(1,20)
 
-# Opções de Luta
+    print(f"Você rolou um D20!")
+    print(f"Resultado: {d20}")
 
-    luta = None
-    
-    def ler_input():
-        global luta
-        luta = input(f'''Oque Você Fará? 1-Atacar / 2-Fugir / 3-Magia / 4-Bomba / 5-Poção {vermelho}(VOCÊ TEM 10 SEGUNDOS PARA RESPONDER){branco}
->> ''')
-        
-    thread = threading.Thread(target=ler_input)
-    thread.daemon = True
-    thread.start()
-    thread.join(timeout=10)
-    print()
+    if d20 == 20:
 
-# Luta = Atacar
+        dano = nível * 65
 
-    if luta == "1" and classe in ["guerreiro", "executor"]:
+        print("✨ GOLPE FURTIVO CRÍTICO!")
+        print(f"Você causou {dano} de dano!")
 
-        bosshp, hp = ataque_corpo(bosshp, hp, nível, ataque_monstro)
+    elif d20 >= 16:
 
-    elif luta == "1" and classe == "mago":
-        print("Validando Ação, Aguarde...")
-        time.sleep(1)
-        print(cl)
+        dano = nível * 45
 
-        print()
-        print("Um Mago não é tão bom em Combate Corpo a Corpo, Tente Usar Magias!!!")
-        print()
-        print(cl)
+        print("Você acertou vários golpes rápidos!")
 
-    elif luta == "1" and classe == "arqueiro":
-        
-        bosshp, hp = ataque_tiro(bosshp, hp, nível, ataque_monstro)
+    elif d20 >= 11:
 
-# Luta = Magia
+        dano = nível * 30
 
-    elif luta == "3" and classe == "mago":
-        bosshp, hp, mana = ataque_mago(bosshp, hp, nível, mana, ataque_monstro)
+        print("Você acertou uma facada precisa!")
 
-    elif luta == "3" and classe != "mago":
+    elif d20 >= 2:
 
-        print("Validando Ação, Aguarde...")
-        time.sleep(1)
-        print(cl)
+        dano = nível * 15
 
-        print()
-        print("Apenas Magos podem usar Magias!")
-        print()
-        print(cl)
-
-# Luta = Fugir
-
-    elif luta == "2":
-        hp = fuga_all(hp)
-
-# Luta = Bomba
-
-    elif luta == "4":
-        bosshp, hp = ataque_bomba(bosshp, hp, nível, ataque_monstro)
-
-# Luta = Poção
-
-    elif luta == "5":
-
-        if poc_tu >= 3:
-            print("\nVocê já usou o limite de 3 poções neste turno!")
-            print(cl)
-            hp = ataque_monstro(bosshp, hp, nível)
-            poc_tu = 0
-        else:
-            qtd, hp = usar_pocao(bosshp, hp, nível, qtd, ataque_monstro)
-            poc_tu += 1
-        
-#Luta = Sem Resposta
-
-    elif luta == None:
-        print("\nVocê demorou muito tempo para Responder!")
-        print("Você foi Penalizado!")
-        pena = hp * 0.10
-        hp -= pena
-        print(f"Você perdeu {pena} de Vida!")
-        print()
-
-# Ação Inválida
+        print("Você acertou um golpe fraco.")
 
     else:
-        print("Validando Ação, Aguarde...")
-        time.sleep(1)
-        print(cl)
+
+        dano = 0
+        print("Você errou!")
+
+    bosshp -= dano
+
+    duplo = random.randint(1,100)
+
+    if duplo <= 20:
 
         print()
-        print(f"Ação Inválida! Tente Novamente!")
+        print(f"{amarelo}ATAQUE DUPLO!{branco}")
+
+        dano2 = dano // 2
+
+        bosshp -= dano2
+
+        print(f"Você acertou uma segunda facada e causou {dano2} de dano!")
+
+        if bosshp <= 0:
+            return bosshp, hp
+
         print()
-        print(cl)
+
+        print("O Dragão prepara um contra-ataque...")
+
+        time.sleep(2)
+
+        esquiva = random.randint(1,100)
+
+        if esquiva <= 25:
+
+            print(f"{verde}Você desviou do ataque do Dragão!{branco}")
+            print("Nenhum dano recebido!")
+
+    else:
 
         hp = ataque_monstro(bosshp, hp, nível)
-        
-# Final da Batalha
-      
+
+    return bosshp, hp
+
+# =====================================================================
+# ====================== Batalha contra o Dragão ======================
+# =====================================================================
+
+def barra_vida(atual, maximo, tamanho=20):
+
+    if atual < 0:
+        atual = 0
+
+    porcentagem = atual / maximo
+
+    cheio = int(porcentagem * tamanho)
+
+    vazio = tamanho - cheio
+
+    barra = "█" * cheio + "░" * vazio
+
+    return f"[{barra}] {int(atual)}/{int(maximo)} {branco}({porcentagem*100:.0f}%)"
+
+bosshp = nível * 100
+bosshp_max = bosshp
+hp_max = hp
+poc_tu = 0
+
+while bosshp > 0 and hp > 0:
+
+    limpar()
+
+    print(cl)
+    print(f"{roxo}══════ DRAGÃO ══════")
+    print(barra_vida(bosshp, bosshp_max))
+    print()
+
+    print(f"{vermelho}══════ JOGADOR ══════")
+    print(barra_vida(hp, hp_max) + branco)
+    print(f"{verde}Mana: {mana}")
+    print(f"{azul}Poções: {qtd}")
+    print(f"{amarelo}Bombas: {bombas}")
+    if classe == "arqueiro":
+        print(f"{branco}Flechas: {flechas}")
+    print()
+
+    print(f"Escolha sua ação para atacar o {roxo}Dragão{branco}!")
+
+    if classe == "guerreiro":
+        print("1 - Espada")
+
+    elif classe == "executor":
+        print("1 - Machado")
+
+    elif classe == "mago":
+        print("1 - Magias")
+
+    elif classe == "arqueiro":
+        print("1 - Arco")
+
+    elif classe == "bandido":
+        print("1 - Adagas")
+    
+    print("2 - Bomba")
+    print("3 - Poção")
+    print("4 - Fugir")
+
+    acao = input(">> ")
+
+    if acao == "1":
+
+        if classe in ["guerreiro","executor"]:
+
+            bosshp, hp = ataque_corpo(
+                bosshp,
+                hp,
+                nível,
+                ataque_monstro
+            )
+
+        elif classe == "mago":
+
+            bosshp, hp, mana = ataque_mago(
+                bosshp,
+                hp,
+                nível,
+                mana,
+                ataque_monstro
+            )
+
+        elif classe == "arqueiro":
+
+            if flechas <= 0:
+
+                print("Você está sem flechas!")
+
+                hp = ataque_monstro(
+                    bosshp,
+                    hp,
+                    nível
+                )
+
+            else:
+
+                flechas -= 1
+
+                bosshp, hp = ataque_tiro(
+                    bosshp,
+                    hp,
+                    nível,
+                    ataque_monstro
+                )
+
+        elif classe == "bandido":
+
+            bosshp, hp = ataque_bandido(
+                bosshp,
+                hp,
+                nível,
+                ataque_monstro
+            )
+
+    elif acao == "2":
+
+        if bombas <= 0:
+
+            print("Você não possui bombas!")
+
+            hp = ataque_monstro(
+                bosshp,
+                hp,
+                nível
+            )
+
+        else:
+
+            bombas -= 1
+
+            bosshp, hp = ataque_bomba(
+                bosshp,
+                hp,
+                nível,
+                ataque_monstro
+            )
+
+    elif acao == "3":
+
+        if poc_tu >= 3:
+
+            print("Você já usou 3 poções neste turno!")
+
+            hp = ataque_monstro(
+                bosshp,
+                hp,
+                nível
+            )
+
+        else:
+
+            qtd, hp = usar_pocao(
+                bosshp,
+                hp,
+                nível,
+                qtd,
+                ataque_monstro
+            )
+
+            poc_tu += 1
+
+    elif acao == "4":
+
+        hp = fuga_all(hp)
+        break
+
+    else:
+
+        print("Ação inválida!")
+
+        hp = ataque_monstro(
+            bosshp,
+            hp,
+            nível
+        )
+
+# ==============================================================
+# ====================== Final da Batalha ======================
+# ==============================================================
+   
 if bosshp <= 0:
     print()
     print(f"O {roxo}Dragão {branco}está Morto, Você salvou o Vilarejo!!!")
@@ -834,7 +1128,7 @@ if bosshp <= 0:
     print()
 
     print(f"Seu saldo Agora é:{amarelo}", round(reais, 2), "Reais")
-    print({branco})
+    print(branco)
     print(cl)
 
 elif hp <= 0:
