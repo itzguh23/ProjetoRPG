@@ -208,7 +208,7 @@ class RPGGuildaGUI:
         self.limpar_texto()
         self.escrever(f"Classe escolhida: {classe.capitalize()}!")
         self.escrever(f"Bem-vindo(a), {self.nome}, novato(a) de nível {self.nivel}.")
-        self.escrever("Seus atributos iniciais foram definidos.")
+        self.escrever("Seus Status iniciais foram definidos.")
         self.atualizar_status()
         self.tela_treino()
 

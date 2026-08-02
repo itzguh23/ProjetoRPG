@@ -2,6 +2,26 @@ import random
 import time
 import os
 
+cl = "-"*140
+bencao = random.randint(1, 100)
+if bencao >= 2:
+    lenda = True
+else:
+    lenda = False
+
+# ===============================================================
+# ====================== Cores do Terminal ======================
+# ===============================================================
+
+azul = "\033[34m"
+branco = "\033[37m"
+verde = "\033[32m"
+amarelo = "\033[33m"
+roxo = "\033[35m"
+vermelho = "\033[31m"
+verde1 = "\033[92m"
+cinza = "\033[90m"
+
 def input(*args, **kwargs):
     texto = " ".join(map(str, args))
 
@@ -260,21 +280,50 @@ def loja():
 def limpar():
     os.system("cls" if os.name == "nt" else "clear")
 
-cl = "-"*140
+def heroi(hp, mana, reais):
+    global nome, nível, idade, bencao
 
-# ===============================================================
-# ====================== Cores do Terminal ======================
-# ===============================================================
+    print("Você ouve Passos pesados se aproximando...")
+    time.sleep(3)
+    print("Todos Presentes na Guilda paralisam e ficam em Silêncio...")
+    time.sleep(3)
+    print('''um Homem, Idoso, Aparenta ter 80+ anos, com uma longa Barba Branca e um Cajado de Madeira, entra no estabelecimento...''')
+    time.sleep(3)
+    print("Ele se aproxima de Você...")
+    time.sleep(3)
+    print()
+    print(f"{vermelho}Merlin{branco}: Olá " + nome.capitalize() + ", Me chamo Merlin")
+    time.sleep(3)
+    print(f"{vermelho}Merlin{branco}: como eu sei o seu Nome? você Pergunta...")
+    time.sleep(3)
+    print(f"{vermelho}Merlin{branco}: Eu sou um dos 5 Anciões Divinos, e eu sei de tudo que acontece nesse mundo...")
+    time.sleep(3)
+    print(f"{vermelho}Merlin{branco}: Os Deuses me Enviaram para te Ajudar, Afinal Você é o Escolhido, O Herói da Profecia!...")
+    time.sleep(3)
+    print(f"{vermelho}Merlin{branco}: Aqui Receba Isso...")
+    time.sleep(3)
+    print(f"{cinza}Sistema{branco}: Você Recebeu um Poder Divino, Ao Beber a Poção, você se Sente mais Forte...")
+    time.sleep(3)
+    print(f"{vermelho}Merlin{branco}: Preciso ir Agora, Até mais... Herói...")
+    time.sleep(3)
+    print()
+    print("Seus Status Mudaram")
 
+    input("\nAperte ENTER Para Continuar: ")
+    
+    hp = nível * 70
+    mana = nível * 100
+    reais = nível * 150
 
-azul = "\033[34m"
-branco = "\033[37m"
-verde = "\033[32m"
-amarelo = "\033[33m"
-roxo = "\033[35m"
-vermelho = "\033[31m"
-verde1 = "\033[92m"
-cinza = "\033[90m"
+    print(f"{azul}Hp: {hp}")
+    print(f"{verde1}Mana: {mana}")
+    print(f"{amarelo}Dinheiro: {reais}{branco}")
+    print(f"Idade Atual: {idade}")
+    print(f"Classe: {classe.capitalize()}")
+    print(f"{vermelho}HERÓI DA PROFECIA{branco}")
+    print(cl)
+
+    return hp, mana, reais
 
 # ==================================================================
 # ====================== Informações Iniciais ======================
@@ -304,25 +353,36 @@ while True:
         break
 
 print("Escolha sua Classe, Por Favor!")
-classe = input('''Mago / Executor / Guerreiro / Arqueiro / Bandido
->> ''').lower()
+classe = int(input('''1 - Mago / 2 - Executor / 3 - Guerreiro / 4 - Arqueiro / 5 - Bandido
+>> '''))
 print(cl)
 
-while classe not in ["mago", "executor", "guerreiro", "arqueiro", "bandido"]:
+while classe not in [1, 2, 3, 4, 5]:
     print("Resposta Inválida! Tente Novamente!")
-    classe = input('''Mago / Executor / Guerreiro / Arqueiro / Bandido
->> ''').lower()
+    classe = int(input('''1 - Mago / 2 - Executor / 3 - Guerreiro / 4 - Arqueiro / 5 - Bandido
+>> '''))
     print(cl)
-    
+
+if classe == 1:
+    classe = "mago"
+elif classe == 2:
+    classe = "executor"
+elif classe == 3:
+    classe = "guerreiro"
+elif classe == 4:
+    classe = "arqueiro"
+elif classe == 5:
+    classe = "bandido"
+
 print("Classe Escolhida:", classe.capitalize())
 
 nível = 1
 print(f"\nOlá {nome.capitalize()} Bem Vindo a Guilda dos Aventureiros, Você é um Novato(a) de nível:", nível)
 print(cl)
 
-print("Esses são seus atributos!")
+print("Esses são seus Status Iniciais!")
+
 input("\nAperte ENTER Para Continuar: ")
-print(cl)
 
 hp = nível * 50
 mana = nível * 75
@@ -332,81 +392,170 @@ print(f"{azul}Hp: {hp}")
 print(f"{verde1}Mana: {mana}")
 print(f"{amarelo}Dinheiro: {reais}{branco}")
 print(f"Idade Atual: {idade}")
+print(f"Classe: {classe.capitalize()}")
 print(cl)
+
+if lenda == True:
+    heroi(hp, mana, reais)
 
 # ===================================================================
 # ====================== Treinamento de 3 Anos ======================
 # ===================================================================
 
-while True:
-
-    train = int(input('''Como qualquer Iniciante você decide Treinar, Mas por quantos Anos?
+def treinar():
+    global nível, idade, hp, mana, reais
+    while True:
+        train = int(input('''Você é Novato, Precisa Treinar, Mas por quantos Anos?
 >> '''))
-    if train >= 2 and train <= 16:
-        anos = train
-        for i in range(anos):
-            barra = "■" * (i + 1)
-            __builtins__.print(f"\rTreinando... [{barra:<{anos}}] {i+1}/{anos}",end="",flush=True)
-            aumento = 6
-            nível += aumento
-            time.sleep(0.3)
+        if train >= 2 and train <= 16:
+            anos = train
+            for i in range(anos):
+                barra = "■" * (i + 1)
+                __builtins__.print(f"\rTreinando... [{barra:<{anos}}] {i+1}/{anos}",end="",flush=True)
+                aumento = 6
+                nível += aumento
+                time.sleep(0.3)
 
-        print("\nDurante seu Treinamento, Você Subiu de Nível, Parabéns!!!")
-        print(f"{azul}Novo Nível: {nível}{branco}")
-        print("Esses são seus novos atributos! ")
-        input("\nAperte ENTER Para Continuar: ")
-        print(cl)
+            print("\nDurante seu Treinamento, Você Subiu de Nível, Parabéns!!!")
+            print(f"{azul}Novo Nível: {nível}{branco}")
+            print("Esses são seus novos Status! ")
+            input("\nAperte ENTER Para Continuar: ")
+            print(cl)
 
-        hp = nível * 50
-        mana = nível * 75
-        reais = nível * 100
-        idade += anos
+            hp = nível * 50
+            mana = nível * 75
+            reais = nível * 100
+            idade += anos
 
-        print(f"{azul}Hp: {hp}")
-        print(f"{verde1}Mana: {mana}")
-        print(f"{amarelo}Dinheiro: {reais}{branco}")
-        print(f"Idade Atual: {idade}")
-        print(cl)
-        time.sleep(2)
-        input("\nAperte ENTER Para Continuar: ")
-        break
+            print(f"{azul}Hp: {hp}")
+            print(f"{verde1}Mana: {mana}")
+            print(f"{amarelo}Dinheiro: {reais}{branco}")
+            print(f"Idade Atual: {idade}")
+            print(f"Classe: {classe.capitalize()}")
+            time.sleep(2)
+            print(cl)
+            input("\nAperte ENTER Para Continuar: ")
+            break
 
-    elif train <= 1:
-        print("\nVocê precisa treinar por NO MÍNIMO, 2 Anos!")
-        print()
-        continue
+        elif train <= 1:
+            print("\nVocê precisa treinar por NO MÍNIMO, 2 Anos!")
+            print()
+            continue
 
-    elif train >= 30:
-        print("Você não precisa Treinar Tanto assim...")
-        print()
-        continue
+        elif train >= 30:
+            print("Você não precisa Treinar Tanto assim...")
+            print()
+            continue
 
-    else:
-        anos = train
-        nível = 100
-        for i in range(anos):
-            barra = "■" * (i + 1)
-            __builtins__.print(f"\rTreinando... [{barra:<{anos}}] {i+1}/{anos}",end="",flush=True)
-            time.sleep(0.3)
-        print("\nVocê treinou tanto, Que Alcançou o Nível 100(Máx)")
-        print("Meus Parabéns!!!")
-        print("Esses são seus novos atributos! ")
-        input("\nAperte ENTER Para Continuar: ")
-        print(cl)
+        else:
+            anos = train
+            nível = 100
+            for i in range(anos):
+                barra = "■" * (i + 1)
+                __builtins__.print(f"\rTreinando... [{barra:<{anos}}] {i+1}/{anos}",end="",flush=True)
+                time.sleep(0.3)
+            print("\nVocê treinou tanto, Que Alcançou o Nível 100(Máx)")
+            print("Meus Parabéns!!!")
+            print("Esses são seus novos Status! ")
+            input("\nAperte ENTER Para Continuar: ")
+            print(cl)
 
-        hp = nível * 50
-        mana = nível * 75
-        reais = nível * 100
-        idade += anos
+            hp = nível * 50
+            mana = nível * 75
+            reais = nível * 100
+            idade += anos
 
-        print(f"{azul}Hp: {hp}")
-        print(f"{verde1}Mana: {mana}")
-        print(f"{amarelo}Dinheiro: {reais}{branco}")
-        print(f"Idade Atual: {idade}")
-        time.sleep(2)
-        print(cl)
-        input("\nAperte ENTER Para Continuar: ")
-        break
+            print(f"{azul}Hp: {hp}")
+            print(f"{verde1}Mana: {mana}")
+            print(f"{amarelo}Dinheiro: {reais}{branco}")
+            print(f"Idade Atual: {idade}")
+            print(f"Classe: {classe.capitalize()}")
+            time.sleep(2)
+            print(cl)
+            input("\nAperte ENTER Para Continuar: ")
+            break
+    return nível, idade, hp, mana, reais
+
+def treinar_lenda():
+    global nível, idade, hp, mana, reais
+    while True:
+        train = int(input('''Mesmo sendo o Herói da Profecia, Você precisa Treinar, Mas por quantos Anos?
+>> '''))
+        if train >= 2 and train <= 9:
+            anos = train
+            for i in range(anos):
+                barra = "■" * (i + 1)
+                __builtins__.print(f"\rTreinando... [{barra:<{anos}}] {i+1}/{anos}",end="",flush=True)
+                aumento = 10
+                nível += aumento
+                time.sleep(0.3)
+
+            print("\nDurante seu Treinamento, Você Subiu de Nível, Parabéns!!!")
+            print(f"{azul}Novo Nível: {nível}{branco}")
+            print("Esses são seus novos Status! ")
+            input("\nAperte ENTER Para Continuar: ")
+            print(cl)
+
+            hp = nível * 70
+            mana = nível * 100
+            reais = nível * 150
+            idade += anos
+
+            print(f"{azul}Hp: {hp}")
+            print(f"{verde1}Mana: {mana}")
+            print(f"{amarelo}Dinheiro: {reais}{branco}")
+            print(f"Idade Atual: {idade}")
+            print(f"Classe: {classe.capitalize()}")
+            print(f"{vermelho}HERÓI DA PROFECIA{branco}")
+            time.sleep(2)
+            print(cl)
+            input("\nAperte ENTER Para Continuar: ")
+            break
+
+        elif train <= 1:
+            print("\nVocê precisa treinar por NO MÍNIMO, 2 Anos!")
+            print()
+            continue
+
+        elif train >= 20:
+            print("Você não precisa Treinar Tanto assim...")
+            print()
+            continue
+
+        else:
+            anos = train
+            nível = 100
+            for i in range(anos):
+                barra = "■" * (i + 1)
+                __builtins__.print(f"\rTreinando... [{barra:<{anos}}] {i+1}/{anos}",end="",flush=True)
+                time.sleep(0.3)
+            print("\nVocê treinou tanto, Que Alcançou o Nível 100(Máx)")
+            print("Meus Parabéns!!!")
+            print("Esses são seus novos Status! ")
+            input("\nAperte ENTER Para Continuar: ")
+            print(cl)
+
+            hp = nível * 70
+            mana = nível * 100
+            reais = nível * 150
+            idade += anos
+
+            print(f"{azul}Hp: {hp}")
+            print(f"{verde1}Mana: {mana}")
+            print(f"{amarelo}Dinheiro: {reais}{branco}")
+            print(f"Idade Atual: {idade}")
+            print(f"Classe: {classe.capitalize()}")
+            print(f"{vermelho}HERÓI DA PROFECIA{branco}")
+            time.sleep(2)
+            print(cl)
+            input("\nAperte ENTER Para Continuar: ")
+            break
+    return nível, idade, hp, mana, reais
+
+if lenda == True:
+    treinar_lenda()
+else:
+    treinar()
 
 limpar()
 

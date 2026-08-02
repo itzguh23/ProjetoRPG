@@ -1,136 +1,182 @@
-bosshp = nível * 100
-print(f"Oh Não, Apareceu um {roxo}Dragão {branco}e Ele está Atacando o Vilarejo!")
-poc_tu = 0
-input("\nAperte ENTER Para Continuar: ")
+import random
+import time
+import os
 
-while bosshp > 0 and hp > 0:
-    poc_tu = 0
-    limpar()
-    print(f"A Vida dele está em: {roxo}{bosshp}{branco}")
-    print(f"Sua Vida está em {azul}{int(hp)}{branco}")
-    print()
+cl = "-"*140
 
-# Opções de Luta
+# ===============================================================
+# ====================== Cores do Terminal ======================
+# ===============================================================
 
-    luta = None
-    
-    def ler_input():
-        global luta
-        luta = input(f'''Oque Você Fará? 1-Atacar / 2-Fugir / 3-Magia / 4-Bomba / 5-Poção {vermelho}(VOCÊ TEM 10 SEGUNDOS PARA RESPONDER){branco}
->> ''')
-        
-    thread = threading.Thread(target=ler_input)
-    thread.daemon = True
-    thread.start()
-    thread.join(timeout=10)
-    print()
+azul = "\033[34m"
+branco = "\033[37m"
+verde = "\033[32m"
+amarelo = "\033[33m"
+roxo = "\033[35m"
+vermelho = "\033[31m"
+verde1 = "\033[92m"
+cinza = "\033[90m"
 
-# Luta = Atacar
+lenda = int(input("Digite 1 para ser o Herói da Lenda ou 0 para ser Ninguém: "))
+if lenda == 1:
+    lenda = True
+else:
+    lenda = False
+print()
+idade = 16
+nível = 1
 
-    if luta == "1" and classe in ["guerreiro", "executor"]:
+def treinar():
+    global nível, idade, hp, mana, reais
+    while True:
+        train = int(input('''Você é Novato, Precisa Treinar, Mas por quantos Anos?
+>> '''))
+        if train >= 2 and train <= 16:
+            anos = train
+            for i in range(anos):
+                barra = "■" * (i + 1)
+                __builtins__.print(f"\rTreinando... [{barra:<{anos}}] {i+1}/{anos}",end="",flush=True)
+                aumento = 6
+                nível += aumento
+                time.sleep(0.3)
 
-        bosshp, hp = ataque_corpo(bosshp, hp, nível, ataque_monstro)
-
-    elif luta == "1" and classe == "mago":
-        print("Validando Ação, Aguarde...")
-        time.sleep(1)
-        print(cl)
-
-        print()
-        print("Um Mago não é tão bom em Combate Corpo a Corpo, Tente Usar Magias!!!")
-        print()
-        print(cl)
-
-    elif luta == "1" and classe == "arqueiro":
-        
-        bosshp, hp = ataque_tiro(bosshp, hp, nível, ataque_monstro)
-
-# Luta = Magia
-
-    elif luta == "3" and classe == "mago":
-        bosshp, hp, mana = ataque_mago(bosshp, hp, nível, mana, ataque_monstro)
-
-    elif luta == "3" and classe != "mago":
-
-        print("Validando Ação, Aguarde...")
-        time.sleep(1)
-        print(cl)
-
-        print()
-        print("Apenas Magos podem usar Magias!")
-        print()
-        print(cl)
-
-# Luta = Fugir
-
-    elif luta == "2":
-        hp = fuga_all(hp)
-
-# Luta = Bomba
-
-    elif luta == "4":
-        bosshp, hp = ataque_bomba(bosshp, hp, nível, ataque_monstro)
-
-# Luta = Poção
-
-    elif luta == "5":
-
-        if poc_tu >= 3:
-            print("\nVocê já usou o limite de 3 poções neste turno!")
+            print("\nDurante seu Treinamento, Você Subiu de Nível, Parabéns!!!")
+            print(f"{azul}Novo Nível: {nível}{branco}")
+            print("Esses são seus novos Status! ")
+            input("\nAperte ENTER Para Continuar: ")
             print(cl)
-            hp = ataque_monstro(bosshp, hp, nível)
-            poc_tu = 0
+
+            hp = nível * 50
+            mana = nível * 75
+            reais = nível * 100
+            idade += anos
+
+            print(f"{azul}Hp: {hp}")
+            print(f"{verde1}Mana: {mana}")
+            print(f"{amarelo}Dinheiro: {reais}{branco}")
+            print(f"Idade Atual: {idade}")
+            time.sleep(2)
+            print(cl)
+            input("\nAperte ENTER Para Continuar: ")
+            break
+
+        elif train <= 1:
+            print("\nVocê precisa treinar por NO MÍNIMO, 2 Anos!")
+            print()
+            continue
+
+        elif train >= 30:
+            print("Você não precisa Treinar Tanto assim...")
+            print()
+            continue
+
         else:
-            qtd, hp = usar_pocao(bosshp, hp, nível, qtd, ataque_monstro)
-            poc_tu += 1
-        
-#Luta = Sem Resposta
+            anos = train
+            nível = 100
+            for i in range(anos):
+                barra = "■" * (i + 1)
+                __builtins__.print(f"\rTreinando... [{barra:<{anos}}] {i+1}/{anos}",end="",flush=True)
+                time.sleep(0.3)
+            print("\nVocê treinou tanto, Que Alcançou o Nível 100(Máx)")
+            print("Meus Parabéns!!!")
+            print("Esses são seus novos Status! ")
+            input("\nAperte ENTER Para Continuar: ")
+            print(cl)
 
-    elif luta == None:
-        print("\nVocê demorou muito tempo para Responder!")
-        print("Você foi Penalizado!")
-        pena = hp * 0.10
-        hp -= pena
-        print(f"Você perdeu {pena} de Vida!")
-        print()
+            hp = nível * 50
+            mana = nível * 75
+            reais = nível * 100
+            idade += anos
 
-# Ação Inválida
+            print(f"{azul}Hp: {hp}")
+            print(f"{verde1}Mana: {mana}")
+            print(f"{amarelo}Dinheiro: {reais}{branco}")
+            print(f"Idade Atual: {idade}")
+            time.sleep(2)
+            print(cl)
+            input("\nAperte ENTER Para Continuar: ")
+            break
+    return nível, idade, hp, mana, reais
 
-    else:
-        print("Validando Ação, Aguarde...")
-        time.sleep(1)
-        print(cl)
+def treinar_lenda():
+    global nível, idade, hp, mana, reais
+    while True:
+        train = int(input('''Mesmo sendo o Herói da Profecia, Você precisa Treinar, Mas por quantos Anos?
+>> '''))
+        if train >= 2 and train <= 9:
+            anos = train
+            for i in range(anos):
+                barra = "■" * (i + 1)
+                __builtins__.print(f"\rTreinando... [{barra:<{anos}}] {i+1}/{anos}",end="",flush=True)
+                aumento = 10
+                nível += aumento
+                time.sleep(0.3)
 
-        print()
-        print(f"Ação Inválida! Tente Novamente!")
-        print()
-        print(cl)
+            print("\nDurante seu Treinamento, Você Subiu de Nível, Parabéns!!!")
+            print(f"{azul}Novo Nível: {nível}{branco}")
+            print("Esses são seus novos Status! ")
+            input("\nAperte ENTER Para Continuar: ")
+            print(cl)
 
-        hp = ataque_monstro(bosshp, hp, nível)
-        
-# Final da Batalha
-      
-if bosshp <= 0:
-    print()
-    print(f"O {roxo}Dragão {branco}está Morto, Você salvou o Vilarejo!!!")
-    print()
-    print(f"{verde}Povo do Vilarejo:{branco} MUITO OBRIGADO {nome.upper()} VOCÊ NOS SALVOU, PEGUE ISSO COMO RECOMPENSA")
-    input("\nAperte ENTER Para Continuar: ")
-        
-    win = 10000
-    reais += win
-    print()
+            hp = nível * 70
+            mana = nível * 100
+            reais = nível * 150
+            idade += anos
 
-    print(f"{amarelo}{win} Reais{branco} Adicionados ao Banco")
-    print()
+            print(f"{azul}Hp: {hp}")
+            print(f"{verde1}Mana: {mana}")
+            print(f"{amarelo}Dinheiro: {reais}{branco}")
+            print(f"Idade Atual: {idade}")
+            time.sleep(2)
+            print(cl)
+            input("\nAperte ENTER Para Continuar: ")
+            break
 
-    print(f"Seu saldo Agora é:{amarelo}", round(reais, 2), "Reais")
-    print(branco)
-    print(cl)
+        elif train <= 1:
+            print("\nVocê precisa treinar por NO MÍNIMO, 2 Anos!")
+            print()
+            continue
 
-elif hp <= 0:
-    print()
-    print("Você está Morto!!!")
-    print(f"{vermelho}GAME OVER!{branco}")
-    print()
-    print(cl)
+        elif train >= 20:
+            print("Você não precisa Treinar Tanto assim...")
+            print()
+            continue
+
+        else:
+            anos = train
+            nível = 100
+            for i in range(anos):
+                barra = "■" * (i + 1)
+                __builtins__.print(f"\rTreinando... [{barra:<{anos}}] {i+1}/{anos}",end="",flush=True)
+                time.sleep(0.3)
+            print("\nVocê treinou tanto, Que Alcançou o Nível 100(Máx)")
+            print("Meus Parabéns!!!")
+            print("Esses são seus novos Status! ")
+            input("\nAperte ENTER Para Continuar: ")
+            print(cl)
+
+            hp = nível * 70
+            mana = nível * 100
+            reais = nível * 150
+            idade += anos
+
+            print(f"{azul}Hp: {hp}")
+            print(f"{verde1}Mana: {mana}")
+            print(f"{amarelo}Dinheiro: {reais}{branco}")
+            print(f"Idade Atual: {idade}")
+            time.sleep(2)
+            print(cl)
+            input("\nAperte ENTER Para Continuar: ")
+            break
+    return nível, idade, hp, mana, reais
+
+if lenda == True:
+    treinar_lenda()
+else:
+    treinar()
+
+print(f"{azul}Hp: {hp}")
+print(f"{verde1}Mana: {mana}")
+print(f"{amarelo}Dinheiro: {reais}{branco}")
+print(f"Idade Atual: {idade}")
+print("Nível:", nível)
