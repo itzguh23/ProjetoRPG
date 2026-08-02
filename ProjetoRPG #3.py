@@ -4,7 +4,7 @@ import os
 
 cl = "-"*140
 bencao = random.randint(1, 100)
-if bencao >= 2:
+if bencao >= 85:
     lenda = True
 else:
     lenda = False
@@ -47,6 +47,22 @@ def print(*args, **kwargs):
 
     __builtins__.print(end=end)
 
+def medo(*args, **kwargs):
+
+    texto = " ".join(map(str, args))
+
+    if texto.startswith(cl):
+        __builtins__.print(texto, **kwargs)
+        return
+
+    end = kwargs.get("end", "\n")
+
+    for letra in texto:
+        __builtins__.print(letra, end="", flush=True)
+        time.sleep(0.2)
+
+    __builtins__.print(end=end)
+
 qtd = 0
 bombas = 0
 flechas = 0
@@ -79,7 +95,7 @@ def loja():
         print("2 - Comprar Bombas   (R$150)")
 
         if classe == "arqueiro":
-            print("3 - Comprar Flechas (R$5)")
+            print("3 - Comprar Flechas  (R$5)")
 
         elif classe == "bandido":
             print(f"{vermelho}3 - Roubar Item{branco}")
@@ -283,29 +299,33 @@ def limpar():
 def heroi(hp, mana, reais):
     global nome, nível, idade, bencao
 
-    print("Você ouve Passos pesados se aproximando...")
-    time.sleep(3)
+    print("Você sente uma Presença pesada se aproximando...")
+    time.sleep(2)
     print("Todos Presentes na Guilda paralisam e ficam em Silêncio...")
-    time.sleep(3)
+    time.sleep(2)
     print('''um Homem, Idoso, Aparenta ter 80+ anos, com uma longa Barba Branca e um Cajado de Madeira, entra no estabelecimento...''')
-    time.sleep(3)
+    time.sleep(2)
     print("Ele se aproxima de Você...")
-    time.sleep(3)
+    time.sleep(2)
     print()
-    print(f"{vermelho}Merlin{branco}: Olá " + nome.capitalize() + ", Me chamo Merlin")
-    time.sleep(3)
-    print(f"{vermelho}Merlin{branco}: como eu sei o seu Nome? você Pergunta...")
-    time.sleep(3)
-    print(f"{vermelho}Merlin{branco}: Eu sou um dos 5 Anciões Divinos, e eu sei de tudo que acontece nesse mundo...")
-    time.sleep(3)
-    print(f"{vermelho}Merlin{branco}: Os Deuses me Enviaram para te Ajudar, Afinal Você é o Escolhido, O Herói da Profecia!...")
-    time.sleep(3)
-    print(f"{vermelho}Merlin{branco}: Aqui Receba Isso...")
-    time.sleep(3)
+    medo(f"{vermelho}você está tomado pelo medo...")
+    time.sleep(2)
+
+    print()
+    print(f"{verde}Merlin{branco}: Olá " + nome.capitalize() + ", Me chamo Merlin")
+    time.sleep(2)
+    print(f"{verde}Merlin{branco}: como eu sei o seu Nome? você Pergunta...")
+    time.sleep(2)
+    print(f"{verde}Merlin{branco}: Eu sou um dos 5 Anciões Divinos, e eu sei de tudo que acontece nesse mundo...")
+    time.sleep(2)
+    print(f"{verde1}Merlin{branco}: Os Deuses me Enviaram para te Ajudar, Afinal Você é o Escolhido, O Herói da Profecia!...")
+    time.sleep(2)
+    print(f"{verde}Merlin{branco}: Aqui Receba Isso...")
+    time.sleep(2)
     print(f"{cinza}Sistema{branco}: Você Recebeu um Poder Divino, Ao Beber a Poção, você se Sente mais Forte...")
-    time.sleep(3)
-    print(f"{vermelho}Merlin{branco}: Preciso ir Agora, Até mais... Herói...")
-    time.sleep(3)
+    time.sleep(2)
+    print(f"{verde}Merlin{branco}: Preciso ir Agora, Até mais... Herói...")
+    time.sleep(2)
     print()
     print("Seus Status Mudaram")
 
@@ -330,7 +350,7 @@ def heroi(hp, mana, reais):
 # ==================================================================
 
 print(cl)
-nome = input('''Qual é o Seu Nome?
+nome = input(f'''{branco}Qual é o Seu Nome?
 >> ''')
 print(cl)
 
