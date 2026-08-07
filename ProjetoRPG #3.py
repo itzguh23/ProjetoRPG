@@ -69,11 +69,12 @@ flechas = 0
 
 def loja():
 
-    global qtd, bombas, flechas, reais, classe
+    global qtd, bombas, flechas, reais, classe, nome
 
     PRECO_POCAO = 50
     PRECO_BOMBA = 150
     PRECO_FLECHA = 5
+    PRECO_NOME = 5000
 
     while True:
 
@@ -83,8 +84,9 @@ def loja():
         print(f"{amarelo}=========== LOJA DA GUILDA ==========={branco}")
         print(f"Dinheiro : {amarelo}R${reais}{branco}")
         print("--------------------------------------")
-        print(f"{verde}Poções : {qtd}{branco}")
+        print(f"{vermelho}Poções : {qtd}{branco}")
         print(f"{roxo}Bombas : {bombas}{branco}")
+        print(f"{verde}Nome : {nome.capitalize()}{branco}")
 
         if classe == "arqueiro":
             print(f"{azul}Flechas: {flechas}{branco}")
@@ -93,12 +95,14 @@ def loja():
 
         print("1 - Comprar Poções   (R$50)")
         print("2 - Comprar Bombas   (R$150)")
+        print("3 - Mudar Nome       (R$5k)")
+
 
         if classe == "arqueiro":
-            print("3 - Comprar Flechas  (R$5)")
+            print("4 - Comprar Flechas  (R$5)")
 
         elif classe == "bandido":
-            print(f"{vermelho}3 - Roubar Item{branco}")
+            print(f"{vermelho}4 - Roubar Item{branco}")
 
         print("0 - Sair")
 
@@ -178,7 +182,7 @@ def loja():
         # FLECHAS
         # ==========================
 
-        elif escolha == 3 and classe == "arqueiro":
+        elif escolha == 4 and classe == "arqueiro":
 
             try:
                 comprar = int(input("\nQuantidade:\n>> "))
@@ -207,7 +211,7 @@ def loja():
         # BANDIDO
         # ==========================
 
-        elif escolha == 3 and classe == "bandido":
+        elif escolha == 4 and classe == "bandido":
 
             print(cl)
             print("O que deseja roubar?")
@@ -260,6 +264,18 @@ def loja():
             else:
                 print("Opção inválida!")
 
+        # ==========================
+        # NOME
+        # ==========================
+
+        elif escolha == 3:
+            if reais < PRECO_NOME:
+                print("Dinheiro insuficiente para mudar o nome!")
+
+            else:
+                reais -= PRECO_NOME
+                nome = input("\nDigite seu novo nome:\n>> ").strip()
+
         else:
             print("Opção inválida!")
 
@@ -272,6 +288,7 @@ def loja():
 
     print(f"Poções : {qtd}")
     print(f"Bombas : {bombas}")
+    print(f"Nome : {nome.capitalize()}")
 
     if classe == "arqueiro":
         print(f"Flechas: {flechas}")
